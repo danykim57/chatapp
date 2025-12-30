@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package chatapp.chat;
+
+import "auth.proto";
+
+option java_multiple_files = true;
+option java_package = "com.chatapp.grpc.chat";
+option java_outer_classname = "ChatProto";
+
+// Chat Service
+service ChatService {
+  // Send a message to a room
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+
+  // Stream messages from a room (server streaming)
+  rpc StreamMessages(StreamMessagesRequest) returns (stream MessageEvent);
+
+  // Get message history for a room
+  rpc GetMessageHistory(GetMessageHistoryRequest) returns (GetMessageHistoryResponse);
+
+  // Send typing indicator
+  rpc SendTypingIndicator(TypingIndicatorRequest) returns (TypingIndicatorResponse);
+}
+
+// Send message request
+message SendMessageRequest {
+  string token = 1;
+  string room_id = 2;
+  string content = 3;
+}
+
+// Stream messages request
+message StreamMessagesRequest {
+  string token = 1;
+  string room_id = 2;
+}
+
+// Get message history request
+message GetMessageHistoryRequest {
+  string token = 1;
+  string room_id = 2;
+  int32 limit = 3; // Number of messages to retrieve (default: 50)
+  int64 before_timestamp = 4; // For pagination
+}
+
+// Typing indicator request
+message TypingIndicatorRequest {
+  string token = 1;
+  string room_id = 2;
+  bool is_typing = 3;
+}
+
+// Send message response
+message SendMessageResponse {
+  bool success = 1;
+  ChatMessage message = 2;
+  string error_message = 3;
+}
+
+// Get message history response
+message GetMessageHistoryResponse {
+  bool success = 1;
+  repeated ChatMessage messages = 2;
+  string error_message = 3;
+}
+
+// Typing indicator response
+message TypingIndicatorResponse {
+  bool success = 1;
+}
+
+// Message event (for streaming)
+message MessageEvent {
+  MessageEventType event_type = 1;
+  ChatMessage message = 2;
+  UserEvent user_event = 3;
+  TypingEvent typing_event = 4;
+}
+
+// Message event type
+enum MessageEventType {
+  NEW_MESSAGE = 0;
+  USER_JOINED = 1;
+  USER_LEFT = 2;
+  TYPING_INDICATOR = 3;
+}
+
+// Chat message model
+message ChatMessage {
+  string message_id = 1;
+  string room_id = 2;
+  chatapp.auth.User sender = 3;
+  string content = 4;
+  int64 timestamp = 5;
+  MessageType message_type = 6;
+}
+
+// Message type enum
+enum MessageType {
+  TEXT = 0;
+  SYSTEM = 1;
+}
+
+// User event (join/leave)
+message UserEvent {
+  chatapp.auth.User user = 1;
+  string room_id = 2;
+  UserEventType event_type = 3;
+}
+
+// User event type
+enum UserEventType {
+  JOINED = 0;
+  LEFT = 1;
+}
+
+// Typing event
+message TypingEvent {
+  chatapp.auth.User user = 1;
+  string room_id = 2;
+  bool is_typing = 3;
+}

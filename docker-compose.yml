@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  envoy:
+    build:
+      context: ./envoy
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "9901:9901"
+    networks:
+      - chatapp-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  chatapp-network:
+    driver: bridge

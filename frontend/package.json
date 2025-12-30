@@ -1,0 +1,29 @@
+{
+  "name": "grpc-chat-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "gRPC-Web Chat Application Frontend",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "proto:generate": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/proto --ts_out=service=grpc-web:./src/proto --grpc-web_out=import_style=typescript,mode=grpcwebtext:./src/proto -I ../proto ../proto/*.proto"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "grpc-web": "^1.5.0",
+    "google-protobuf": "^3.21.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/google-protobuf": "^3.15.12",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "protoc-gen-grpc-web": "^1.5.0",
+    "ts-protoc-gen": "^0.15.0"
+  }
+}

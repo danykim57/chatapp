@@ -1,0 +1,56 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: grpc-chat-backend
+
+  datasource:
+    url: jdbc:h2:mem:chatdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+# gRPC Server Configuration
+grpc:
+  server:
+    port: 9090
+    enable-reflection: true
+
+# JWT Configuration
+jwt:
+  secret: YourSuperSecretKeyForJWTTokenGenerationPleaseChangeInProduction
+  expiration: 86400000 # 24 hours in milliseconds
+  guest-expiration: 3600000 # 1 hour for guests
+
+# Chat Application Configuration
+chat:
+  max-message-length: 2000
+  message-history-limit: 50
+  max-username-length: 30
+  rate-limit:
+    login-attempts: 5
+    login-window-minutes: 15
+    messages-per-minute: 30
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.chatapp: DEBUG
+    io.grpc: INFO
+    org.hibernate.SQL: DEBUG

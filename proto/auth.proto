@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package chatapp.auth;
+
+option java_multiple_files = true;
+option java_package = "com.chatapp.grpc.auth";
+option java_outer_classname = "AuthProto";
+
+// Authentication Service
+service AuthService {
+  // Login with username and password
+  rpc Login(LoginRequest) returns (LoginResponse);
+
+  // Guest login (no password required)
+  rpc GuestLogin(GuestLoginRequest) returns (LoginResponse);
+
+  // Logout
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+
+  // Validate token
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+
+  // Register new user
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+}
+
+// Login request for registered users
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// Guest login request
+message GuestLoginRequest {
+  string guest_name = 1; // Optional: user can provide a name or we generate one
+}
+
+// Logout request
+message LogoutRequest {
+  string token = 1;
+}
+
+// Token validation request
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+// Register request
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+}
+
+// Login/GuestLogin response
+message LoginResponse {
+  bool success = 1;
+  string token = 2;
+  User user = 3;
+  string error_message = 4;
+}
+
+// Logout response
+message LogoutResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Token validation response
+message ValidateTokenResponse {
+  bool valid = 1;
+  User user = 2;
+  string error_message = 3;
+}
+
+// Register response
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+  string error_message = 3;
+}
+
+// User model
+message User {
+  string user_id = 1;
+  string username = 2;
+  UserType user_type = 3;
+  int64 created_at = 4;
+}
+
+// User type enum
+enum UserType {
+  REGISTERED = 0;
+  GUEST = 1;
+  ADMIN = 2;
+}

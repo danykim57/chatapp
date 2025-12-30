@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package chatapp.room;
+
+import "auth.proto";
+
+option java_multiple_files = true;
+option java_package = "com.chatapp.grpc.room";
+option java_outer_classname = "RoomProto";
+
+// Room Service
+service RoomService {
+  // Get list of available rooms
+  rpc GetRooms(GetRoomsRequest) returns (GetRoomsResponse);
+
+  // Create a new room
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+
+  // Join a room
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+
+  // Leave a room
+  rpc LeaveRoom(LeaveRoomRequest) returns (LeaveRoomResponse);
+
+  // Get users in a room
+  rpc GetRoomUsers(GetRoomUsersRequest) returns (GetRoomUsersResponse);
+}
+
+// Get rooms request
+message GetRoomsRequest {
+  string token = 1;
+  string search_query = 2; // Optional: filter rooms
+}
+
+// Create room request
+message CreateRoomRequest {
+  string token = 1;
+  string room_name = 2;
+  string description = 3;
+}
+
+// Join room request
+message JoinRoomRequest {
+  string token = 1;
+  string room_id = 2;
+}
+
+// Leave room request
+message LeaveRoomRequest {
+  string token = 1;
+  string room_id = 2;
+}
+
+// Get room users request
+message GetRoomUsersRequest {
+  string token = 1;
+  string room_id = 2;
+}
+
+// Get rooms response
+message GetRoomsResponse {
+  bool success = 1;
+  repeated Room rooms = 2;
+  string error_message = 3;
+}
+
+// Create room response
+message CreateRoomResponse {
+  bool success = 1;
+  Room room = 2;
+  string error_message = 3;
+}
+
+// Join room response
+message JoinRoomResponse {
+  bool success = 1;
+  string message = 2;
+  string error_message = 3;
+}
+
+// Leave room response
+message LeaveRoomResponse {
+  bool success = 1;
+  string message = 2;
+  string error_message = 3;
+}
+
+// Get room users response
+message GetRoomUsersResponse {
+  bool success = 1;
+  repeated chatapp.auth.User users = 2;
+  string error_message = 3;
+}
+
+// Room model
+message Room {
+  string room_id = 1;
+  string room_name = 2;
+  string description = 3;
+  int32 active_users = 4;
+  int64 created_at = 5;
+  string last_message = 6;
+  int64 last_message_time = 7;
+}
