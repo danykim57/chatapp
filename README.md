@@ -134,7 +134,7 @@ The gRPC server will start on port **9090**.
 
 **Backend Endpoints:**
 - gRPC Server: `localhost:9090`
-- H2 Console: `http://localhost:8080/h2-console`
+- H2 Console: `http://localhost:8080/h2-console` (if Spring Boot web server is enabled)
   - JDBC URL: `jdbc:h2:mem:chatdb`
   - Username: `sa`
   - Password: (empty)
@@ -147,10 +147,10 @@ Start the Envoy proxy using Docker Compose:
 docker-compose up -d
 ```
 
-Envoy will start on port **8080** and proxy requests to the backend gRPC server on port **9090**.
+Envoy will start on port **8081** and proxy requests to the backend gRPC server on port **9090**.
 
 **Envoy Endpoints:**
-- gRPC-Web Proxy: `localhost:8080`
+- gRPC-Web Proxy: `localhost:8081`
 - Admin Console: `localhost:9901`
 
 ### 4. Frontend Setup
@@ -303,7 +303,7 @@ chat:
 Edit `frontend/src/services/grpcClient.ts`:
 
 ```typescript
-export const GRPC_HOST = 'http://localhost:8080';
+export const GRPC_HOST = 'http://localhost:8081';
 ```
 
 ## API Documentation
